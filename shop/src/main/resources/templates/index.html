@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>옷 쇼핑몰</title>
+    <link href="/main.css" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <style>
+        body {
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<div th:replace="~{ nav.html::navbar }"></div>
+<div th:replace="~{ nav.html::welcome }"></div>
+
+<!-- Best-selling Products Section -->
+<div class="best-selling">
+    <h2>가장 많이 팔리는 옷</h2>
+    <div class="product-list">
+        <div class="product" th:each="item: ${items}" th:onclick="'location.href=\'/detail/' + ' ' + ${item.id} + '?pageNum=1\''">
+            <img th:if="${item.getImgUrl!=''}" th:src="@{${item.getImgUrl}}" alt="Product 1">
+            <img th:if="${item.getImgUrl==''}" src="https://placehold.co/300" alt="Product 1">
+            <h3 th:text="${item.getTitle}">트렌디한 티셔츠</h3>
+            <p th:text="${item.getText}">편안하고 세련된 디자인</p>
+            <div th:text="'₩'+${item.getPrice}" class="price">₩29,000</div>
+        </div>
+        <div class="look">
+            <a href="/list/page/1">더 둘러보기</a>
+        </div>
+
+    </div>
+</div>
+
+<!-- Navigation Bar -->
+<div th:replace="~{ footer.html::footer }"></div>
+
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const logoutElement = document.getElementById('logout');
+
+    if (logoutElement) {
+        logoutElement.onclick = function() {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch('/logout_jwt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken // CSRF 토큰 추가
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/login'; // 리다이렉트
+                } else {
+                    console.error('Logout failed:', response.statusText);
+                }
+            });
+        };
+    }
+});
+</script>
+</html>

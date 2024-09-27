@@ -1,0 +1,345 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;800&display=swap');
+
+body, html {
+    overflow: auto; /* 또는 overflow: visible; */
+    height: auto;
+}
+
+body{
+    font-family : 'Montserrat';
+    background-color: #f8f8f8;
+    margin: 0;
+}
+a{
+    text-decoration: none;
+}
+a:visited{
+    text-decoration: none;
+}
+
+.nav {
+     display: flex;
+     padding: 20px;
+     align-items: center;
+      background-color: #FF7F50;
+     color: white;
+}
+.nav a,
+.nav p {
+ margin-right: 10px;
+ text-decoration : none;
+ font-weight : 500;
+ letter-spacing : -0.5px;
+ color:white;
+}
+
+.nav .logo {
+ font-weight : 800;
+}
+.welcome {
+    position:relative;
+    text-align: center;
+    background-image: url('/images/clothes_background.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 100px 0;
+}
+
+.welcome::before{
+    content: "";
+    opacity: 0.4;
+    background-color: #000;
+    position:absolute;
+    top:0px;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    pointer-events: none;
+}
+
+.welcome h1 {
+    position: relative;
+    margin: 0;
+    font-size: 36px;
+    color: rgb(230,230,230);
+}
+
+input, button, textarea {
+ padding : 8px 13px;
+ margin-top : 5px;
+ border : 1px solid grey;
+ border-radius : 4px;
+ vertical-align : middle;
+}
+button {
+ background : black;
+ color : white;
+ border : none;
+}
+input {
+ display : block;
+}
+
+.card {
+ margin : 30px auto;
+ display : flex;
+}
+.card img {
+ width : 150px;
+ margin-right : 20px;
+}
+
+.detail_container{
+    display:flex;
+}
+.detail {
+  width:40%;
+  text-align : center;
+}
+.detail form input{
+    display: inline-block;
+}
+
+.comment_container{
+    position: relative;
+    width:60%;
+
+    text-align:center;
+}
+
+.texts{
+    display:inline-block;
+    width: 80%;
+    margin-bottom: 15px;
+    margin-top: 0px;
+    padding: 10px 5px;
+    background:rgb(255,255,255);
+    border-radius: 5px;
+    word-break: break-all;
+}
+
+.texts_name{
+    margin:0px;
+    text-align:left;
+    margin-left: 10%;
+}
+
+
+.option a,
+.option button{
+    display: inline-block;
+
+}
+
+.detail img{
+  max-width : 30%;
+  display : block;
+  margin : auto;
+}
+
+.container{
+    text-align:center;
+}
+
+.page-btn{
+    padding:8px 14px;
+    border-radius:6px;
+    margin: 0px 5px;
+    border: 1px solid rgb(195, 195, 195);
+    font-size: 30px;
+}
+
+.container .white{
+    background-color: white;
+    color:rgb(75, 137, 240);
+}
+
+.sm{
+    padding:5px 10px;
+    font-size: 20px;
+    margin: 0px 3px;
+}
+
+.container .blue{
+    background-color: rgb(75, 137, 240);
+    color:white;
+}
+
+/* footer 부분 */
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    margin-top: auto;
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px;
+}
+
+/* 소셜 미디어 아이콘 스타일 */
+.social-icons {
+    margin: 10px 0;
+}
+
+.social-icons a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 20px;
+}
+
+.social-icons a:hover {
+    color: #007bff;
+}
+
+/* index 페이지 product */
+/* Best-selling Products */
+.best-selling {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.best-selling h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.product-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.product {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 200px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    cursor:pointer;
+}
+
+.product img{
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.product h3 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.product p {
+    color: #777;
+    font-size: 14px;
+}
+
+.product .price {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+.look {
+    position: relative;
+    width: 250px;
+    margin-top: 120px;
+    text-align: center;
+}
+
+.look a{
+    position: absolute;
+    padding: 10px 5px;
+    border: 1px solid black;
+    border-radius: 3px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 16px;
+    left: 50%;
+    top: 0%;
+    transform: translate(-50%, 0%);
+    font-weight: 400;
+}
+
+form input{
+    display: inline-block;
+}
+
+.container img{
+    width: 200px;
+    height: 300px;
+    object-fit: cover;
+}
+
+.inquiry_background{
+    margin:0;
+    padding: 0;
+    background-image: url('/images/background.jpg');
+    width: 100%;
+    height: 700px;
+    background-size: cover;
+    position: relative;
+    text-align: center;
+}
+
+.inquiry_background::before{
+    content: "";
+    opacity: 0.2;
+
+    background-color: #000;
+    position:absolute;
+    top:0px;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    pointer-events: none;
+}
+
+.inquiry_background h1,
+.inquiry_background h2{
+    position: relative;
+    top:35%;
+    margin:0;
+    font-size: 30px;
+    color: rgb(255,255,255);
+}
+
+.inquiry_background h2{
+    top:20%;
+}
+
+.inquiry_btn {
+    font-weight: 600;
+    border: 2px solid white;
+    padding: 15px;
+    border-radius: 25px;
+    position: relative;
+    top:30%;
+    margin:0;
+    font-size: 36px;
+    color: rgb(255,255,255);
+}
+
+.inquiry_btn::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgb(200, 200, 200,0.25);
+    filter: blur(2px);
+    border-radius: inherit;
+}

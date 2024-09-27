@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1:1 채팅</title>
+    <link href="/chatStyle.css" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">
+        <button class="back-button" onclick="history.back()">←</button>
+        관리자와의 1:1 채팅
+    </div>
+    <div class="chat-body" id="chatBody">
+        <div class="chat-message admin">
+            <div class="message">안녕하세요! 무엇을 도와드릴까요?</div>
+        </div>
+        <div class="chat-message customer">
+            <div class="message">안녕하세요! 제품에 대해 궁금한 점이 있어요.</div>
+        </div>
+        <div th:each="text: ${texts}">
+            <div th:if="${text.isAdmin}" class="chat-message admin">
+                <div th:text="${text.getText}" class="message"></div>
+            </div>
+            <div th:if="${!text.isAdmin}" class="chat-message customer">
+                <div th:text="${text.getText}" class="message"></div>
+            </div>
+        </div>
+    </div>
+    <div class="chat-footer">
+        <input type="text" id="messageInput" placeholder="메시지를 입력하세요..." />
+        <button id="sendButton" onclick="send()">전송</button>
+    </div>
+</div>
+
+<script>
+    const chatBody = document.getElementById('chatBody');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    function send(){
+      fetch('/chat/add', {
+        method : 'POST',
+        headers : {
+                  'Content-Type': 'application/json',
+                  [csrfHeader]: csrfToken // CSRF 토큰 추가
+                    },
+        body : JSON.stringify({
+          messageInput : messageInput.value
+        })
+      }).then(response => {
+            if (response.ok) {
+                const message = messageInput.value.trim();
+                if (message) {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('chat-message', 'customer');
+                    messageElement.innerHTML = `<div class="message">${message}</div>`;
+                    chatBody.appendChild(messageElement);
+                    messageInput.value = '';
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }
+            }
+        });
+    }
+
+    messageInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
+            sendButton.click();
+        }
+    });
+</script>
+
+</body>
+</html>

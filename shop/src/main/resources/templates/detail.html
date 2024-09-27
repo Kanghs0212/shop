@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body style="background:rgb(245,245,245);">
+<div th:replace="~{ nav.html::navbar }"></div>
+    <h2 style="text-align:center;">상세페이지</h2>
+    <div class="container" style="display: flex; justify-content: center;">
+        <div style="margin-top:15px; border-radius:6px;">
+            <img th:if="${item.getImgUrl!=''}" th:src="@{${item.getImgUrl}}">
+            <img th:if="${item.getImgUrl==''}" src="https://placehold.co/300">
+        </div>
+
+        <div style="margin:auto 50px;">
+            <h4 th:text="${item.getTitle}" style="border-bottom: 1px solid grey">바지</h4>
+            <p th:text="${item.getText}">설명</p>
+            <p th:text="${item.getPrice + '원'}">7억</p>
+            <form sec:authorize="isAuthenticated()" method="POST" action="/order" style="margin-bottom:10px;">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <input type="hidden" name="id" th:value="${item.getId}">
+                <input type="hidden" name="title" th:value="${item.getTitle}">
+                <input type="hidden" name="price" th:value="${item.getPrice}">
+                <input type="number" min="0" name="orderCount" placeholder="수량">
+                <button type="submit">주문</button>
+            </form>
+
+            <form sec:authorize="isAuthenticated()" method="POST" action="/comment">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <input type="hidden" name="id" th:value="${item.getId}">
+                <textarea type="text" name="commentInput" placeholder="댓글입력 (매너준수!)" style="height:100px; resize: none;"></textarea>
+                <button type="submit" >입력</button>
+            </form>
+        </div>
+
+
+    </div>
+    <div class="container">
+        <h3 style="text-align:center;">리뷰</h3>
+        <div th:each="text: ${texts}" >
+            <p class="texts_name" th:text="'name: ' + ${text.getUsername}">아이디</p>
+            <p class="texts" th:text="${text.getContent}">hello</p>
+        </div>
+        <div class="container">
+            <span th:if="${cnt > 0}" th:each="i: ${#numbers.sequence(1, cnt)}">
+                <a th:if="${i == cnt_now}" th:text="${i}" class="page-btn blue sm" th:href="@{'/detail/' + ${item.getId} + '?pageNum=' + ${i}}"></a>
+                <a th:if="${i != cnt_now}" th:text="${i}" class="page-btn white sm" th:href="@{'/detail/' + ${item.getId} + '?pageNum=' + ${i}}"></a>
+            </span>
+        </div>
+    </div>
+
+<!-- Navigation Bar -->
+<div th:replace="~{ footer.html::footer }"></div>
+</body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const logoutElement = document.getElementById('logout');
+
+    if (logoutElement) {
+        logoutElement.onclick = function() {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch('/logout_jwt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken // CSRF 토큰 추가
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/login'; // 리다이렉트
+                } else {
+                    console.error('Logout failed:', response.statusText);
+                }
+            });
+        };
+    }
+});
+</script>
+</html>
