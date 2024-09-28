@@ -24,22 +24,14 @@
         </div>
 
         <div th:each="text: ${texts}">
-            <div th:if="${role.equals('USER')}">
+
                 <div th:if="${text.isAdmin}" class="chat-message admin">
                     <div th:text="${text.getText}" class="message"></div>
                 </div>
                 <div th:if="${!text.isAdmin}" class="chat-message customer">
                     <div th:text="${text.getText}" class="message"></div>
                 </div>
-            </div>
-            <div th:if="${role.equals('ADMIN')}">
-                <div th:if="${!text.isAdmin}" class="chat-message admin">
-                    <div th:text="${text.getText}" class="message"></div>
-                </div>
-                <div th:if="${text.isAdmin}" class="chat-message customer">
-                    <div th:text="${text.getText}" class="message"></div>
-                </div>
-            </div>
+
         </div>
     </div>
     <div class="chat-footer">
@@ -48,7 +40,16 @@
     </div>
 </div>
 
+<script th:inline="javascript">
+    let roles = [[${role}]] || 'USER';
+</script>
+
 <script>
+    window.onload = function() {
+        const chatBody = document.getElementById('chatBody');
+        chatBody.scrollTop = chatBody.scrollHeight; // 페이지 로드 시 스크롤 맨 아래로 이동
+    };
+
     const chatBody = document.getElementById('chatBody');
     const messageInput = document.getElementById('messageInput');
     const sendButton = document.getElementById('sendButton');
@@ -73,9 +74,16 @@
           }).then(response => {
                 if (response.ok) {
                     const message = messageInput.value.trim();
-                    if (message) {
+                    if (message && roles === 'USER') {
                         const messageElement = document.createElement('div');
                         messageElement.classList.add('chat-message', 'customer');
+                        messageElement.innerHTML = `<div class="message">${message}</div>`;
+                        chatBody.appendChild(messageElement);
+                        messageInput.value = '';
+                        chatBody.scrollTop = chatBody.scrollHeight;
+                    } else{
+                        const messageElement = document.createElement('div');
+                        messageElement.classList.add('chat-message', 'admin');
                         messageElement.innerHTML = `<div class="message">${message}</div>`;
                         chatBody.appendChild(messageElement);
                         messageInput.value = '';
@@ -90,6 +98,32 @@
             sendButton.click();
         }
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+    const logoutElement = document.getElementById('logout');
+
+    if (logoutElement) {
+        logoutElement.onclick = function() {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch('/logout_jwt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken // CSRF 토큰 추가
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/login'; // 리다이렉트
+                } else {
+                    console.error('Logout failed:', response.statusText);
+                }
+            });
+        };
+    }
+});
 </script>
 
 </body>
