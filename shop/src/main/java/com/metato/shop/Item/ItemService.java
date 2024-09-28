@@ -48,7 +48,7 @@ public class ItemService {
     }
 
     public Page<Item> findPageBy(Integer pageNum){
-        Page<Item> result = itemRepository.findPageBy(PageRequest.of(pageNum-1, 5));
+        Page<Item> result = itemRepository.findPageBy(PageRequest.of(pageNum-1, 10));
         return result;
     }
 
