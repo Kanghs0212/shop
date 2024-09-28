@@ -22,12 +22,23 @@
         <div class="chat-message customer">
             <div class="message">안녕하세요! 제품에 대해 궁금한 점이 있어요.</div>
         </div>
+
         <div th:each="text: ${texts}">
-            <div th:if="${text.isAdmin}" class="chat-message admin">
-                <div th:text="${text.getText}" class="message"></div>
+            <div th:if="${role.equals('USER')}">
+                <div th:if="${text.isAdmin}" class="chat-message admin">
+                    <div th:text="${text.getText}" class="message"></div>
+                </div>
+                <div th:if="${!text.isAdmin}" class="chat-message customer">
+                    <div th:text="${text.getText}" class="message"></div>
+                </div>
             </div>
-            <div th:if="${!text.isAdmin}" class="chat-message customer">
-                <div th:text="${text.getText}" class="message"></div>
+            <div th:if="${role.equals('ADMIN')}">
+                <div th:if="${!text.isAdmin}" class="chat-message admin">
+                    <div th:text="${text.getText}" class="message"></div>
+                </div>
+                <div th:if="${text.isAdmin}" class="chat-message customer">
+                    <div th:text="${text.getText}" class="message"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -43,30 +54,35 @@
     const sendButton = document.getElementById('sendButton');
     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+    let roomNum = [[${roomNum}]];
+
 
     function send(){
-      fetch('/chat/add', {
-        method : 'POST',
-        headers : {
-                  'Content-Type': 'application/json',
-                  [csrfHeader]: csrfToken // CSRF 토큰 추가
-                    },
-        body : JSON.stringify({
-          messageInput : messageInput.value
-        })
-      }).then(response => {
-            if (response.ok) {
-                const message = messageInput.value.trim();
-                if (message) {
-                    const messageElement = document.createElement('div');
-                    messageElement.classList.add('chat-message', 'customer');
-                    messageElement.innerHTML = `<div class="message">${message}</div>`;
-                    chatBody.appendChild(messageElement);
-                    messageInput.value = '';
-                    chatBody.scrollTop = chatBody.scrollHeight;
+        const messageInputValue = messageInput.value.trim();
+        const data = {
+            messageInput: messageInputValue,
+            roomNum: roomNum
+        };
+          fetch('/chat/add', {
+            method : 'POST',
+            headers : {
+                      'Content-Type': 'application/json',
+                      [csrfHeader]: csrfToken // CSRF 토큰 추가
+                        },
+            body : JSON.stringify(data)
+          }).then(response => {
+                if (response.ok) {
+                    const message = messageInput.value.trim();
+                    if (message) {
+                        const messageElement = document.createElement('div');
+                        messageElement.classList.add('chat-message', 'customer');
+                        messageElement.innerHTML = `<div class="message">${message}</div>`;
+                        chatBody.appendChild(messageElement);
+                        messageInput.value = '';
+                        chatBody.scrollTop = chatBody.scrollHeight;
+                    }
                 }
-            }
-        });
+            });
     }
 
     messageInput.addEventListener('keypress', (event) => {

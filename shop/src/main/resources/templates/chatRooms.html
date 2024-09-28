@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Rooms</title>
     <link href="/main.css" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <style>
         table {
             width: 80%; /* 화면의 80%만 차지하게 설정 */
@@ -52,19 +54,69 @@
     </tr>
     </thead>
     <tbody>
-    <!-- Example Row for Room 1 -->
-    <tr>
-        <td>Chat Room 1</td>
-        <td>5</td>
+    <tr th:each="room: ${rooms}">
+        <td th:text="${room.getUsername}">Chat Room 1</td>
+        <td th:text="${room.getCreated}">5</td>
         <td>
-            <form action="/join-chat-room-1" method="GET">
-                <button class="chat-button" type="submit">Join</button>
-            </form>
+            <a class="openChatButton chat-button enter" th:attr="data-userid=${room.getUserId}" type="button">입장</a>
+            <a class="openChatButton chat-button delete" th:attr="data-userid=${room.getUserId}" type="button" style="background:red;">삭제</a>
         </td>
     </tr>
 
     </tbody>
 </table>
+<div th:if="cnt!=null" class="container" >
+        <span th:if="${cnt > 0}" th:each="i: ${#numbers.sequence(1, cnt)}" >
+            <a th:if="${i == cnt_now}" th:text="${i}" class="page-btn blue" th:href="@{/chat/all/{i}(i=${i})}"></a>
+            <a th:if="${i!=cnt_now}" th:text="${i}" class="page-btn white" th:href="@{/chat/all/{i}(i=${i})}"></a>
+        </span>
+</div>
 <div th:replace="~{ footer.html::footer }"></div>
 </body>
+<script>
+    const openChatButtons = document.querySelectorAll('.enter');
+
+    openChatButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const userId = button.getAttribute('data-userid'); // data-userid 값 가져오기
+            window.open(
+                '/chat/admin?userId=' + userId, // 채팅 HTML 파일의 경로
+                'chatWindow', // 창 이름
+                'width=400,height=600' // 창 크기 설정
+            );
+        });
+    });
+
+
+   const openChatButtonsDelete = document.querySelectorAll('.delete');
+
+    openChatButtonsDelete.forEach(button => {
+        button.addEventListener('click', () => {
+            const userId = button.getAttribute('data-userid'); // data-userid 값 가져오기
+
+            if (confirm("정말로 이 채팅방을 삭제하시겠습니까?")) { // 사용자 확인
+                fetch(`/chat/delete/${userId}`, { // DELETE 요청
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        [document.querySelector('meta[name="_csrf_header"]').getAttribute('content')]:
+                            document.querySelector('meta[name="_csrf"]').getAttribute('content')
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        alert("채팅방이 삭제되었습니다.");
+                        location.reload(); // 페이지 새로 고침
+                    } else {
+                        alert("채팅방 삭제에 실패했습니다.");
+                    }
+                })
+                .catch(error => {
+                    console.error("삭제 요청 중 오류가 발생했습니다:", error);
+                    alert("삭제 요청 중 오류가 발생했습니다.");
+                });
+            }
+        });
+    });
+</script>
 </html>
