@@ -16,16 +16,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.swing.text.html.parser.Entity;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 public class TextController {
 
     private final TextRepository textRepository;
+    private final RoomRepository roomRepository;
 
     @GetMapping("/chat")
     public String comment(@RequestParam Long userId, Model model){
         List<Text> result = textRepository.findByUserId(userId);
+        Optional<Room> tmp = roomRepository.findByUserId(userId);
+
+        if(tmp.isEmpty()){
+            Room room = new Room();
+            room.setUserId(userId);
+            roomRepository.save(room);
+        }
 
         if(!result.isEmpty()){
             model.addAttribute("texts", result);
@@ -42,6 +51,11 @@ public class TextController {
         model.addAttribute("userId", customUser.id);
         return "inquiry.html";
     }
+    @GetMapping("/chat/all")
+    public String chatRooms(){
+        return "chatRooms.html";
+    }
+
 
     @PostMapping("/chat/add")
     public ResponseEntity<Void> message(@RequestBody String messageInput, Authentication auth){

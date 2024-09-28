@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Rooms</title>
+    <link href="/main.css" rel="stylesheet">
+    <style>
+        table {
+            width: 80%; /* 화면의 80%만 차지하게 설정 */
+            margin: 20px auto; /* 테이블을 수평 중앙 정렬 및 상하 여백 추가 */
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .chat-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="~{ nav.html::navbar }"></div>
+<h2 style="text-align: center;">현재 활성화된 채팅방</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>문의자</th>
+        <th>생성 일시</th>
+        <th>채팅방 조작</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Example Row for Room 1 -->
+    <tr>
+        <td>Chat Room 1</td>
+        <td>5</td>
+        <td>
+            <form action="/join-chat-room-1" method="GET">
+                <button class="chat-button" type="submit">Join</button>
+            </form>
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+<div th:replace="~{ footer.html::footer }"></div>
+</body>
+</html>

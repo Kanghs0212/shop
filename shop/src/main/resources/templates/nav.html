@@ -7,6 +7,7 @@
     <a sec:authorize="isAnonymous()" href="/register">Register</a>
     <a sec:authorize="hasAnyRole('ROLE_ADMIN', 'ROLE_USER')" href="/my-page">myPage</a>
     <a sec:authorize="hasRole('ROLE_ADMIN')" href="/order/all">Orders</a>
+    <a sec:authorize="hasRole('ROLE_ADMIN')" href="/chat/all">Chats</a>
     <p sec:authorize="isAuthenticated()" style="cursor:pointer; margin-top:0px; margin-bottom:0px;"
         id="logout">
         Logout
