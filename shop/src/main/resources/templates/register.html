@@ -174,9 +174,12 @@
 
        // 필수 항목이 비어있는지 확인
        if (!username || !password || !passwordCheck || !displayName || !email || !postcode || !roadAddress || !jibun) {
-           // 경고 박스 보여주기
+
            document.getElementById('alertBox').style.display = 'block';
            return false; // 폼 제출을 막음
+       } else if(password != passwordCheck){
+            alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
+            return false;
        } else {
            document.getElementById('alertBox').style.display = 'none';
            return true; // 폼 제출 허용

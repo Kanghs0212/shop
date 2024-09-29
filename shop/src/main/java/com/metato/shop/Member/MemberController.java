@@ -39,8 +39,13 @@ public class MemberController {
     }
 
     @PostMapping("/member")
-    public String member(String username, String password, String displayName){
-        memberService.saveMember(username, password, displayName);
+    public String member(
+            String username, String password, String passwordCheck,
+            String displayName, String email, String postcode,
+            String roadAddress, String jibun, String detailAddress,
+            String extraAddress
+            ){
+        memberService.saveMember(username, password, displayName, email, postcode, roadAddress, jibun, detailAddress, extraAddress);
         return "redirect:/";
     }
 
