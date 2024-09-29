@@ -343,3 +343,26 @@ form input{
     filter: blur(2px);
     border-radius: inherit;
 }
+
+.register_container{
+    margin:auto;
+    width: 50%;
+}
+
+.register_container p{
+    margin:0;
+    padding:0;
+}
+
+.register_container div{
+    margin : 8px 0px;
+}
+
+.twoInput{
+    display:flex;
+    justify-content : space-between;
+}
+
+.twoInput input{
+    width:85%;
+}

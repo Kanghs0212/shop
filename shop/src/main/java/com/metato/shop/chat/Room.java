@@ -28,6 +28,6 @@ public class Room {
     @CreationTimestamp
     private LocalDateTime created;
 
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Text> texts = new ArrayList<>();
 }

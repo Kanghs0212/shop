@@ -22,6 +22,15 @@ public class Member {
     private String password;
     @Column(nullable = false, unique = true )
     private String displayName;
+    @Column(nullable = false, unique = true )
+    private String email;
+
+    private String postcode;
+    private String roadAddress;
+    private String jibun;
+    private String detailAddress;
+    private String extraAddress;
+
     @Column(nullable = false)
     private String role;
 
