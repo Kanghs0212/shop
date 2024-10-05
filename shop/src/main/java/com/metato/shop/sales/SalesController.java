@@ -32,6 +32,8 @@ public class SalesController {
         return "redirect:/order/all";
     }
 
+
+
     @GetMapping("/order/all")
     String getOrderAll(Model model){
         List<Sales> result = salesService.customFindAll();

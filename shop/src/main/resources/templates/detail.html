@@ -5,58 +5,125 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>상품 상세 페이지</title>
     <link href="/main.css" rel="stylesheet">
+    <style>
+        .review-container {
+            margin-top: 30px;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+        }
+        .star-rating {
+            unicode-bidi: bidi-override;
+            margin-bottom: 30px;
+            direction: rtl;
+            text-align: left;
+        }
+        .star-rating > span {
+            display: inline-block;
+            position: relative;
+            width: 1.1em;
+            cursor: pointer;
+        }
+        .star-rating > span::before {
+            content: "☆";
+            position: absolute;
+            left: 0;
+            color: gray;
+        }
+        .star-rating > span.filled::before {
+            content: "★";
+            color: gold;
+        }
+    </style>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
-<body style="background:rgb(245,245,245);">
+<body>
 <div th:replace="~{ nav.html::navbar }"></div>
-    <h2 style="text-align:center;">상세페이지</h2>
-    <div class="container" style="display: flex; justify-content: center;">
-        <div style="margin-top:15px; border-radius:6px;">
-            <img th:if="${item.getImgUrl!=''}" th:src="@{${item.getImgUrl}}">
-            <img th:if="${item.getImgUrl==''}" src="https://placehold.co/300">
-        </div>
 
-        <div style="margin:auto 50px;">
-            <h4 th:text="${item.getTitle}" style="border-bottom: 1px solid grey">바지</h4>
-            <p th:text="${item.getText}">설명</p>
-            <p th:text="${item.getPrice + '원'}">7억</p>
-            <form sec:authorize="isAuthenticated()" method="POST" action="/order" style="margin-bottom:10px;">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                <input type="hidden" name="id" th:value="${item.getId}">
-                <input type="hidden" name="title" th:value="${item.getTitle}">
-                <input type="hidden" name="price" th:value="${item.getPrice}">
-                <input type="number" min="0" name="orderCount" placeholder="수량">
-                <button type="submit">주문</button>
-            </form>
-
-            <form sec:authorize="isAuthenticated()" method="POST" action="/comment">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                <input type="hidden" name="id" th:value="${item.getId}">
-                <textarea type="text" name="commentInput" placeholder="댓글입력 (매너준수!)" style="height:100px; resize: none;"></textarea>
-                <button type="submit" >입력</button>
-            </form>
-        </div>
-
-
-    </div>
-    <div class="container">
-        <h3 style="text-align:center;">리뷰</h3>
-        <div th:each="text: ${texts}" >
-            <p class="texts_name" th:text="'name: ' + ${text.getUsername}">아이디</p>
-            <p class="texts" th:text="${text.getContent}">hello</p>
-        </div>
-        <div class="container">
-            <span th:if="${cnt > 0}" th:each="i: ${#numbers.sequence(1, cnt)}">
-                <a th:if="${i == cnt_now}" th:text="${i}" class="page-btn blue sm" th:href="@{'/detail/' + ${item.getId} + '?pageNum=' + ${i}}"></a>
-                <a th:if="${i != cnt_now}" th:text="${i}" class="page-btn white sm" th:href="@{'/detail/' + ${item.getId} + '?pageNum=' + ${i}}"></a>
-            </span>
-        </div>
+<h2 style="text-align:center; margin-top: 20px;">상품 상세 정보</h2>
+<div class="container" style="display: flex; justify-content: center; margin-top: 30px;">
+    <div class="product-image" style="margin-right: 20px;">
+        <img th:if="${item.getImgUrl != ''}" th:src="@{${item.getImgUrl}}" alt="상품 이미지" style="width:300px; height:auto; border-radius:8px;">
+        <img th:if="${item.getImgUrl == ''}" src="https://placehold.co/300" alt="대체 이미지" style="width:300px; height:auto; border-radius:8px;">
     </div>
 
-<!-- Navigation Bar -->
+    <div class="product-details" >
+
+        <h3 th:text="${item.getTitle}" style="margin-bottom: 10px;">상품명</h3>
+        <p th:text="${item.getText}">상품 설명</p>
+        <p th:text="${item.getPrice + '원'}" style="margin-bottom:10px;">가격</p>
+
+<!--        <form sec:authorize="isAuthenticated()" method="POST" action="/order">-->
+<!--            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
+<!--            <input type="hidden" name="id" th:value="${item.getId}">-->
+<!--            <input type="hidden" name="title" th:value="${item.getTitle}">-->
+<!--            <input type="hidden" name="price" th:value="${item.getPrice}">-->
+<!--            <input type="number" min="0" name="orderCount" placeholder="수량" style="margin-bottom:10px;">-->
+<!--            <button type="submit" class="order-button">주문하기</button>-->
+<!--        </form>-->
+        <form sec:authorize="isAuthenticated()" method="POST" >
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <input type="hidden" name="id" th:value="${item.getId}">
+            <input type="hidden" name="title" th:value="${item.getTitle}">
+            <input type="hidden" name="price" th:value="${item.getPrice}">
+            <input type="number" min="0" name="orderCount" placeholder="수량">
+            <div style="border-bottom: 1px solid grey; height:80px; margin-top:10px;">
+                <button formaction="/order" type="submit" class="order-button">주문하기</button>
+                <button formaction="/cart" type="submit" class="order-button">장바구니에 추가</button>
+            </div>
+
+        </form>
+
+
+        <form sec:authorize="isAuthenticated()" method="POST" action="/comment" style="margin-top: 20px;">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <input type="hidden" name="id" th:value="${item.getId}">
+            <textarea name="commentInput" placeholder="리뷰 작성" style="width: 90%; height: 100px; margin-bottom: 10px; resize: none;"></textarea>
+            <div style="margin-bottom: 10px;">
+                <label>별점: </label>
+                <select name="rating">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <button type="submit" style="margin-left:20px;">리뷰 등록</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!--<div class="container" style="margin-top: 30px;">-->
+<!--    <h3 style="text-align:center;">리뷰</h3>-->
+<!--    <div th:each="text : ${texts}" style="padding: 10px; border-bottom: 1px solid #ccc;">-->
+<!--        <p th:text="'작성자: ' + ${text.getUsername}">작성자 아이디</p>-->
+<!--        <p th:text="${text.getContent}">리뷰 내용</p>-->
+<!--        <p th:text="${text.getRating}">별점</p>-->
+<!--    </div>-->
+<!--</div>-->
+
+<div style="margin: 30px 0px;">
+    <h3 style="text-align: center;">리뷰</h3>
+    <div th:each="text : ${texts}" class="review-container">
+        <p th:text="'작성자: ' + ${text.username}" style="margin-left:30px;">작성자 아이디</p>
+        <p th:text="${text.content}" style="margin-left:30px;">리뷰 내용</p>
+        <div class="star-rating" style="margin-left:30px;">
+        <span th:each="star, iterStat : ${#numbers.sequence(1, 5)}"
+              th:class="${text.rating >= iterStat.index + 1} ? 'filled' : ''"></span>
+        </div>
+    </div>
+</div>
+
+<div th:if="cnt!=null" class="container" >
+        <span th:if="${cnt > 0}" th:each="i: ${#numbers.sequence(1, cnt)}" >
+            <a th:if="${i == cnt_now}" th:text="${i}" class="page-btn blue" th:href="@{/detail/{id}(id=${item.id},pageNum=${i})}"></a>
+            <a th:if="${i!=cnt_now}" th:text="${i}" class="page-btn white" th:href="@{/detail/{id}(id=${item.id},pageNum=${i})}"></a>
+        </span>
+</div>
+
 <div th:replace="~{ footer.html::footer }"></div>
 </body>
 

@@ -20,5 +20,8 @@ public class Comment {
 
     @Column(length = 1000)
     private String content;
+
+    private Integer rating;
+
     private Long parentId;
 }

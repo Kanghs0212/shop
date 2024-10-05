@@ -14,10 +14,10 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/comment")
-    public String comment(@RequestParam Long id,@RequestParam String commentInput, Authentication auth, Model model){
+    public String comment(@RequestParam("id") Long id , @RequestParam String commentInput, @RequestParam int rating,Authentication auth){
         CustomUser user = (CustomUser) auth.getPrincipal();
 
-        commentService.saveComment(commentInput, user.getUsername(), id);
+        commentService.saveComment(commentInput, user.getUsername(), id, rating);
         
         return "redirect:/detail/"+id + "?pageNum=1";
     }

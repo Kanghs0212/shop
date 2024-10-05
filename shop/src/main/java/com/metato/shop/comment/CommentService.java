@@ -15,11 +15,12 @@ public class CommentService {
         return result;
     }
 
-    public void saveComment(String commentInput, String username, Long id){
+    public void saveComment(String commentInput, String username, Long id, int rating){
         Comment comment = new Comment();
         comment.setContent(commentInput);
         comment.setUsername(username);
         comment.setParentId(id);
+        comment.setRating(rating);
         commentRepository.save(comment);
     }
 }
