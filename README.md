@@ -1,6 +1,9 @@
 # Metato Shop - 한국 의류 쇼핑몰
 
 ## 프로젝트 개요
+
+<img width="1438" height="953" alt="쇼핑몰메인" src="https://github.com/user-attachments/assets/63b9e05d-6b71-4c47-886b-64b555d6b772" />
+
 Spring Boot 기반의 한국 의류 온라인 쇼핑몰 웹 애플리케이션입니다.
 회원가입, 로그인, 상품 조회, 주문, 리뷰, 1:1 문의 채팅 등 쇼핑몰의 핵심 기능을 구현했습니다.
 
