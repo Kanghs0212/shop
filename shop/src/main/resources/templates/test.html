@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="/main.css" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+
+    <div class="card" th:each="item: ${tests}">
+        <img src="https://placehold.co/300">
+        <div>
+            <h4 th:text="${item.title}">바지</h4>
+            <p th:text="${item.date}">7억</p>
+        </div>
+    </div>
+
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const logoutElement = document.getElementById('logout');
+
+    if (logoutElement) {
+        logoutElement.onclick = function() {
+            const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+            fetch('/logout_jwt', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    [csrfHeader]: csrfToken // CSRF 토큰 추가
+                },
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/login'; // 리다이렉트
+                } else {
+                    console.error('Logout failed:', response.statusText);
+                }
+            });
+        };
+    }
+});
+</script>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 완료 - Metato</title>
+    <link href="/main.css" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <style>
+        .complete-container {
+            max-width: 500px;
+            margin: 80px auto;
+            padding: 48px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+        .complete-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+        .complete-container h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 12px;
+        }
+        .complete-container p {
+            color: #86868b;
+            font-size: 15px;
+            margin-bottom: 32px;
+        }
+        .complete-container a {
+            display: inline-block;
+            padding: 12px 32px;
+            background: #0071e3;
+            color: #fff;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s ease;
+        }
+        .complete-container a:hover {
+            background: #0077ed;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{ nav.html::navbar }"></div>
+
+<div class="complete-container">
+    <div class="complete-icon">&#10003;</div>
+    <h2>주문이 완료되었습니다!</h2>
+    <p>감사합니다. 주문이 정상적으로 접수되었습니다.</p>
+    <a href="/list/page/1">쇼핑 계속하기</a>
+</div>
+
+<div th:replace="~{ footer.html::footer }"></div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const logoutElement = document.getElementById('logout');
+        if (logoutElement) {
+            logoutElement.onclick = function() {
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+                fetch('/logout_jwt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', [csrfHeader]: csrfToken },
+                }).then(response => { if (response.ok) window.location.href = '/login'; });
+            };
+        }
+    });
+</script>
+</html>

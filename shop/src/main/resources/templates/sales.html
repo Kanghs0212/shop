@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문 관리 - Metato</title>
+    <link href="/main.css" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <style>
+        .orders-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 32px;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+        }
+        .orders-container h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1d1d1f;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .order-item:last-child {
+            border-bottom: none;
+        }
+        .order-info h4 {
+            margin: 0 0 4px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+        .order-info p {
+            margin: 2px 0;
+            font-size: 13px;
+            color: #86868b;
+        }
+        .order-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #0071e3;
+        }
+        .orders-empty {
+            text-align: center;
+            padding: 48px;
+            color: #86868b;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{ nav.html::navbar }"></div>
+
+<div class="orders-container">
+    <h2>주문 목록</h2>
+
+    <div th:if="${orders == null || #lists.isEmpty(orders)}" class="orders-empty">
+        <p>주문 내역이 없습니다.</p>
+    </div>
+
+    <div th:if="${orders != null && !#lists.isEmpty(orders)}">
+        <div class="order-item" th:each="order : ${orders}">
+            <div class="order-info">
+                <h4 th:text="${order.itemName}">상품명</h4>
+                <p th:text="'수량: ' + ${order.count} + '개'">수량</p>
+                <p th:text="'주문자: ' + ${order.username}">주문자</p>
+                <p th:text="'주문일시: ' + ${#temporals.format(order.created, 'yyyy-MM-dd HH:mm')}">주문일시</p>
+            </div>
+            <span class="order-price" th:text="'₩' + ${order.price}">가격</span>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{ footer.html::footer }"></div>
+</body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const logoutElement = document.getElementById('logout');
+        if (logoutElement) {
+            logoutElement.onclick = function() {
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+                fetch('/logout_jwt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', [csrfHeader]: csrfToken },
+                }).then(response => { if (response.ok) window.location.href = '/login'; });
+            };
+        }
+    });
+</script>
+</html>

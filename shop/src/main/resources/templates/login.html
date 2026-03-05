@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>로그인 - Metato</title>
+    <link href="/main.css" rel="stylesheet">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+
+<div th:replace="~{ nav.html::navbar }"></div>
+<div th:replace="~{ nav.html::welcome }"></div>
+
+<div class="login-container">
+    <h3>로그인</h3>
+    <div id="hiddenMessage" class="alert-error" style="display:none;">
+        <h4>아이디 또는 비밀번호가 일치하지 않습니다.</h4>
+    </div>
+    <form id="loginForm">
+        <input name="username" id="username" placeholder="아이디">
+        <input name="password" type="password" id="password" placeholder="비밀번호">
+    </form>
+    <button onclick="loginJWT()">로그인</button>
+    <p style="margin-top:20px; font-size:14px; color:#86868b;">
+        계정이 없으신가요? <a href="/register" style="color:#0071e3; font-weight:600;">회원가입</a>
+    </p>
+</div>
+
+<div th:replace="~{ footer.html::footer }"></div>
+
+<script>
+    function loginJWT(){
+      const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+      const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+      fetch('/login/jwt', {
+        method : 'POST',
+        headers : {'Content-Type': 'application/json', [csrfHeader]: csrfToken},
+        body : JSON.stringify({
+          username : document.querySelector('#username').value,
+          password : document.querySelector('#password').value
+        })
+      }).then(response => {
+            if (response.ok) {
+                window.location.href = '/';
+            } else {
+                document.getElementById('hiddenMessage').style.display = 'block';
+                document.querySelector('#username').value = '';
+                document.querySelector('#password').value = '';
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('loginForm').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                loginJWT();
+            }
+        });
+
+        const logoutElement = document.getElementById('logout');
+        if (logoutElement) {
+            logoutElement.onclick = function() {
+                const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+                fetch('/logout_jwt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', [csrfHeader]: csrfToken },
+                }).then(response => { if (response.ok) window.location.href = '/login'; });
+            };
+        }
+    });
+</script>
+</body>
+</html>
