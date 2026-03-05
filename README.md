@@ -32,7 +32,7 @@ Spring Boot 기반의 한국 의류 쇼핑몰 웹 애플리케이션입니다.
 
 ## 구동 영상
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/YFuJSAFlv6o?si=Vx2jx3qg-W7aqxeT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![구동 영상](https://img.youtube.com/vi/YFuJSAFlv6o/0.jpg)](https://youtu.be/YFuJSAFlv6o)
 
 ## 프로젝트 구조
 
