@@ -1,5 +1,8 @@
 # Metato Shop - 한국 의류 쇼핑몰
 
+<img width="1480" height="955" alt="쇼핑몰메인" src="https://github.com/user-attachments/assets/b2eb3e9c-147c-4621-8745-a90b2b59b3c4" />
+
+
 Spring Boot 기반의 한국 의류 쇼핑몰 웹 애플리케이션입니다.
 
 ## 기술 스택
@@ -81,6 +84,10 @@ src/main/resources/
     ├── main.css                   # 메인 스타일시트
     └── images/                    # 샘플 상품 이미지
 ```
+
+## 구동 영상
+
+https://youtu.be/YFuJSAFlv6o?si=zNqj-qKx89bVpeyb
 
 ## 실행 방법
 
